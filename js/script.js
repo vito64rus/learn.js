@@ -1,58 +1,36 @@
-class HelloWorldElement extends HTMLElement {
-  constructor() {
-    super();
-    
-    this.attachShadow({ mode: 'open' });
-    
-    const gradientStart = '#ff0000';
-    const gradientEnd = '#00fffb';
-    const textSize = 'clamp(4rem, 30vw, 10rem)';
-    
-    this.shadowRoot.innerHTML = `
-      <style>
-        :host {
-          display: block;
-          font-family: 'Arial', sans-serif;
-          font-size: ${textSize};
-          font-weight: 700;
-          text-align: center;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-          animation: fadeIn 1.5s ease-out;
-          position: relative;
-          line-height: 1;
-          margin: 0;
-          padding: 1.6em;
-          background: linear-gradient(
-            135deg,
-            ${gradientStart},
-            ${gradientEnd}
-          );
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
+'use strict';
 
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(200px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0px);
-          }
-        }
-      </style>
-      <slot>HELLO WORLD</slot>
-    `;
-    console.log('Hello, World!');
+const getNumber = (msg) => {
+  while (true) {
+    const input = prompt(msg);
+    if (input === null) return null;
+    const num = parseFloat(input);
+    if (isFinite(num)) return num;
+    alert('Введите корректное число.');
   }
-}
+};
 
-if (!customElements.get('hello-world')) {
-  customElements.define('hello-world', HelloWorldElement);
-}
+const calculateResults = (a, b) => {
+  return {
+    'Сумма': (a + b).toFixed(2),
+    'Разность': (a - b).toFixed(2),
+    'Произведение': (a * b).toFixed(2),
+    'Частное': b !== 0 ? (a / b).toFixed(2) : 'Ошибка (деление на 0)'
+  };
+};
 
-alert ('Hello, World!');
+while (true) {
+  const a = getNumber('Введите первое число');
+  const b = getNumber('Введите второе число');
+  if (a === null || b === null) {
+    if (!confirm('Отмена. Начать заново?')) break;
+    continue;
+  }
+
+  const result = calculateResults(a, b);
+
+  console.table(result);
+  alert(Object.entries(result).map(([k, v]) => `${k}: ${v}`).join('\n'));
+
+  if (!confirm('Выполнить ещё раз?')) break;
+}
