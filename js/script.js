@@ -1,58 +1,40 @@
-class HelloWorldElement extends HTMLElement {
-  constructor() {
-    super();
-    
-    this.attachShadow({ mode: 'open' });
-    
-    const gradientStart = '#ff0000';
-    const gradientEnd = '#00fffb';
-    const textSize = 'clamp(4rem, 30vw, 10rem)';
-    
-    this.shadowRoot.innerHTML = `
-      <style>
-        :host {
-          display: block;
-          font-family: 'Arial', sans-serif;
-          font-size: ${textSize};
-          font-weight: 700;
-          text-align: center;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-          animation: fadeIn 1.5s ease-out;
-          position: relative;
-          line-height: 1;
-          margin: 0;
-          padding: 1.6em;
-          background: linear-gradient(
-            135deg,
-            ${gradientStart},
-            ${gradientEnd}
-          );
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
+// 1. Базовые преобразования
+const text = " JavaScript is AWESOME ";
+const upperText = text.trim().toUpperCase();
+console.log(`${upperText}`);
 
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(200px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0px);
-          }
-        }
-      </style>
-      <slot>HELLO WORLD</slot>
-    `;
-    console.log('Hello, World!');
-  }
-}
+// 2. Извлечение подстрок
+const [year, month, day] = "2024-07-30".split("-");
+console.log(`Год: ${year} / Месяц: ${month} / День: ${day}`);
 
-if (!customElements.get('hello-world')) {
-  customElements.define('hello-world', HelloWorldElement);
-}
+// 3. Поиск и замена
+const loveJS = "Я люблю JavaScript! Я люблю это дело ";
+const result = loveJS
+  .replace("JavaScript", "программирование")
+  .replace(/люблю/g, "обожаю");
+console.log(result);
 
-alert ('Hello, World!');
+// 4. Работа с разделителями
+const fruits = "яблоки,груши,виноград"
+  .trim()
+  .toUpperCase()
+  .split(",")
+  .join(" | ");
+console.log(fruits);
+
+// 5. Проверка содержимого
+const email = "example@mail.com";
+console.log(email.includes("@"));       // true
+console.log(email.endsWith(".com"));    // true
+
+// 6. Маскирование данных
+const card = "1234567812345678";
+const hide = `${card.slice(0, 4)} **** **** ${card.slice(-4)}`;
+console.log(hide);
+
+// 7. Анализ строки
+const word = "JavaScript";
+console.log(word.length);
+console.log(word.at(0));
+console.log(word.at(-1));
+console.log(word.at(Math.floor(word.length / 2)));
