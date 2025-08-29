@@ -67,7 +67,7 @@ const cart = [
   {name: 'Книга', price: 15, quantity: 2}, 
   {name: 'Кофе', price: 25, quantity: 1}, 
   {name: 'Фонарик', price: 10, quantity: 3},
-]
+];
 
 let totalAmount = 0;
 
@@ -83,7 +83,7 @@ const users =  [
   {id: 1, name: 'Alice', isOnline: true}, 
   {id: 2, name: 'Bob', isOnline: false}, 
   {id: 3, name: 'Charlie', isOnline: true},
-]
+];
 
 let firstOnlineUser = null;
 
@@ -101,7 +101,7 @@ const animals = [
   {name: 'Медведь', type: 'дикое'}, 
   {name: 'Собака', type: 'домашнее'}, 
   {name: 'Лиса', type: 'дикое'},
-]
+];
 
 const domestic = [];
 const wild = [];
@@ -122,7 +122,7 @@ const players = [
   {name: 'Анна', score: 85}, 
   {name: 'Борис', score: 95}, 
   {name: 'Вика', score: 76},
-]
+];
 
 let minScore = players[0].score;
 let loser = players[0];
@@ -133,7 +133,7 @@ for (const player of players) {
     loser = player;
   }
 }
-console.log(loser)
+console.log(loser);
 
 // 5. Объединение двух массивов объектов.
 const newProducts = [
