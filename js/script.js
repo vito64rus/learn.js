@@ -144,7 +144,7 @@ const newProducts = [
 const oldProducts = [
   {id: 1, name: 'Ложка'}, 
   {id: 2, name: 'Вилка'},
-  ];
+];
 
 const allProducts = [...oldProducts, ...newProducts].sort((a, b) => a.id - b.id);
 console.log(allProducts);
