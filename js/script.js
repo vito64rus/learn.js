@@ -1,9 +1,9 @@
 // Уровень: Легкий
-// 1. Создание и доступ.
+// 1. Создание и доступ. 
 const student = {
   name: "Виталий",
   age: 30, 
-  grade: 5,
+  grade: 5, 
   class: 8,
 };
 console.log(`Студент ${student.name} учится в ${student.class} классе и ему ${student.age} лет`);
@@ -21,7 +21,7 @@ const car = {
 };
 
 for (const key in car) {
-  console.log(car[key]);
+  console.log(`${key}: ${car[key]}`);
 }
 
 // 4. Проверка свойства (if...in)
@@ -74,9 +74,8 @@ let totalAmount = 0;
 for (let i = 0; i < cart.length; i++) {
   let itemAmount = cart[i].price * cart[i].quantity;
   totalAmount += itemAmount;
-
-  console.log(`${totalAmount} руб.`);
 }
+console.log(`Общая стоимость корзины ${totalAmount} руб.`);
 
 // 2. Поиск объекта по свойству
 const users =  [
