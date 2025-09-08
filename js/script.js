@@ -1,58 +1,89 @@
-class HelloWorldElement extends HTMLElement {
-  constructor() {
-    super();
-    
-    this.attachShadow({ mode: 'open' });
-    
-    const gradientStart = '#ff0000';
-    const gradientEnd = '#00fffb';
-    const textSize = 'clamp(4rem, 30vw, 10rem)';
-    
-    this.shadowRoot.innerHTML = `
-      <style>
-        :host {
-          display: block;
-          font-family: 'Arial', sans-serif;
-          font-size: ${textSize};
-          font-weight: 700;
-          text-align: center;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-          animation: fadeIn 1.5s ease-out;
-          position: relative;
-          line-height: 1;
-          margin: 0;
-          padding: 1.6em;
-          background: linear-gradient(
-            135deg,
-            ${gradientStart},
-            ${gradientEnd}
-          );
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
+// 1. Написание чистой функции
+const cart = ['apple', 'banana'];
+const item = 'orange';
 
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(200px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0px);
-          }
-        }
-      </style>
-      <slot>HELLO WORLD</slot>
-    `;
-    console.log('Hello, World!');
+const addToCart = (cart, item) => {
+  return [...cart, item];
+};
+
+const newCart = addToCart(cart, item);
+
+console.log (cart, newCart);
+
+// 2. Проблема поверхностного копирования
+const user = {
+  name: 'Alice',
+  profile: {
+    settings: {
+      theme: 'dark',
+      notifications: true,
+    }
   }
+};
+
+const userClone = structuredClone(user);
+
+userClone.profile.settings.theme = 'light';
+
+console.log(user.profile.settings.theme);
+
+// 3. Возврат по ссылке
+function getLogger() {
+  const logs = [];  
+
+  return {
+    addLog(message) {
+      logs.push(message);
+    },
+
+    // getLogs() {          В методе getLogs нужно возвращать копию массива, а не оригинал.
+    //   return [logs];     Нарушается принцип инкапсуляции, возвращается прямая ссылка на внутренний массив logs.
+
+    getLogs() {
+      return [...logs];  // Возвращаем копию массива, чтобы внешний код не мог изменить оригинал.
+    }
+  };
 }
 
-if (!customElements.get('hello-world')) {
-  customElements.define('hello-world', HelloWorldElement);
-}
+const logger = getLogger();
+logger.addLog('Session started');
 
-alert ('Hello, World!');
+const logsReference = logger.getLogs();
+logsReference.push('User logged in');  // Изменится только копия.
+
+console.log(logger.getLogs());  // Вывод: ['Session started'] - оригинал не изменился.
+
+{ 
+// 4. Чистая функция, изменяющая вложенный объект
+const enableDarkTheme = (user) => {
+  const clonedUser = structuredClone(user);
+  clonedUser.profile.settings.theme = 'dark';
+  return clonedUser;
+};
+
+// Альтернатива: через spread
+// const enableDarkTheme = (user) => ({
+//   ...user,
+//   profile: {
+//     ...user.profile,
+//     settings: {
+//       ...user.profile.settings,
+//       theme: 'dark'
+//     }
+//   }
+// });
+
+const user = {
+  name: 'Alice',
+  profile: {
+    settings: {
+      theme: 'light', 
+      notifications: true,
+    }
+  }
+};
+
+const updatedUser = enableDarkTheme(user);
+
+console.log(updatedUser);
+}
