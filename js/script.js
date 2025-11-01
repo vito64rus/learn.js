@@ -1,58 +1,136 @@
-class HelloWorldElement extends HTMLElement {
-  constructor() {
-    super();
-    
-    this.attachShadow({ mode: 'open' });
-    
-    const gradientStart = '#ff0000';
-    const gradientEnd = '#00fffb';
-    const textSize = 'clamp(4rem, 30vw, 10rem)';
-    
-    this.shadowRoot.innerHTML = `
-      <style>
-        :host {
-          display: block;
-          font-family: 'Arial', sans-serif;
-          font-size: ${textSize};
-          font-weight: 700;
-          text-align: center;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-          animation: fadeIn 1.5s ease-out;
-          position: relative;
-          line-height: 1;
-          margin: 0;
-          padding: 1.6em;
-          background: linear-gradient(
-            135deg,
-            ${gradientStart},
-            ${gradientEnd}
-          );
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
+const DOM = {
+  type: "body",
+  classNames: [],
+  id: null,
+  children: [
+    {
+      type: "div",
+      classNames: ["wrapper"],
+      id: null,
+      children: [
+        {
+          type: "header",
+          classNames: ["header", "container", "mb-8"],
+          id: null,
+          children: [],
+        },
+        {
+          type: "div",
+          classNames: ["main", "container", "mb-8"],
+          id: null,
+          children: [
+            {
+              type: "div",
+              classNames: ["products", "mb-8"],
+              id: "unicalId",
+              children: [
+                {
+                  type: "div",
+                  classNames: ["product"],
+                  id: null,
+                  children: [],
+                },
+                {
+                  type: "div",
+                  classNames: ["product"],
+                  id: null,
+                  children: [],
+                },
+                {
+                  type: "div",
+                  classNames: ["product"],
+                  id: null,
+                  children: [],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: "footer",
+          classNames: ["footer", "container"],
+          id: null,
+          children: [],
+        },
+      ],
+    },
+  ],
+};
 
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(200px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0px);
-          }
-        }
-      </style>
-      <slot>HELLO WORLD</slot>
-    `;
-    console.log('Hello, World!');
+function checkIfMatchesSelector(element, selector) {
+  if (!element || !selector) return false;
+  // Селектор класса.
+  if (selector[0] === ".") {
+    const checkClass = selector.slice(1); 
+
+    for (let i = 0; i < element.classNames.length; i++) {
+      if (element.classNames[i] === checkClass) return true;
+    }
+    return false;
+  }
+  // Селектор ID.
+  else if (selector[0] === "#") {
+    const checkID = selector.slice(1); 
+    return element.id === checkID; 
+  }
+  // Селектор типа.
+  else {
+    return element.type === selector;
   }
 }
 
-if (!customElements.get('hello-world')) {
-  customElements.define('hello-world', HelloWorldElement);
+// Функция для поиска первого элемента (querySelector)
+function myQuerySelector(selector) {
+  if (typeof selector !== "string" || selector.trim() === "") return null; // Проверка на Null 
+  const found = findFirstElement(DOM, selector); 
+  if (found) return found;
+  return null;
 }
 
-alert ('Hello, World!');
+// Рекурсивная функция для querySelector
+function findFirstElement(currentElement, selector) {
+  // Проверяем текущий элемент
+  if (checkIfMatchesSelector(currentElement, selector)) return currentElement; 
+  // Если есть дети, идем по детям
+  if (currentElement.children) {
+    for (let i = 0; i < currentElement.children.length; i++) {
+      const found = findFirstElement(currentElement.children[i], selector);
+      if (found) return found;
+    }
+  }
+  return null; // Если не нашли
+}
+
+// Функция для поиска всех элементов (querySelectorAll)
+function myQuerySelectorAll(selector) {
+  if (typeof selector !== "string" || selector.trim() === "") return []; // Проверка на пустой массив.
+
+  const results = []; 
+  findAllElements(DOM, selector, results);
+
+  if (results.length > 0) return results;
+  return [];
+}
+
+function findAllElements(currentElement, selector, results) {
+  if (checkIfMatchesSelector(currentElement, selector)) {
+    results.push(currentElement);
+  }
+  if (currentElement.children) {
+    for (let i = 0; i < currentElement.children.length; i++) {
+      findAllElements(currentElement.children[i], selector, results);
+    }
+  }
+}
+
+const firstProduct = myQuerySelector(".product");
+const idElement = myQuerySelector("#unicalId");
+const allContainers = myQuerySelectorAll(".container");
+const notFound = myQuerySelector("");
+const notFoundAll = myQuerySelectorAll("");
+
+console.log(firstProduct);    
+console.log(idElement);     
+console.log(allContainers);  
+console.log(notFound);
+console.log(notFoundAll);
